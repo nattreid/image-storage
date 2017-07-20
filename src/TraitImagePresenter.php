@@ -4,7 +4,7 @@ namespace NAttreid\ImageStorage;
 
 use Nette\Application\UI\ITemplate;
 
-trait TPresenter
+trait TraitImagePresenter
 {
 
 	/** @var ImageStorage */
