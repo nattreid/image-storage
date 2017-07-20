@@ -32,12 +32,12 @@ class FileResource
 	protected $namespace;
 
 	/** @var string */
-	private $type;
+	protected $type;
 
 	public function __construct($file, string $filename = null)
 	{
 		$this->file = $file;
-		$this->filename = $filename ?? basename($this->file);
+		$this->filename = $filename ?? trim(Strings::webalize(basename($this->file), '.', false), '.-');
 	}
 
 	protected function getFile()

@@ -7,6 +7,7 @@ namespace NAttreid\ImageStorage;
 use NAttreid\ImageStorage\Resources\FileResource;
 use NAttreid\ImageStorage\Resources\Resource;
 use NAttreid\ImageStorage\Resources\UploadFileResource;
+use NAttreid\ImageStorage\Resources\UrlResource;
 use Nette\Http\FileUpload;
 use Nette\Utils\Finder;
 
@@ -51,6 +52,13 @@ class ImageStorage
 		return $resource;
 	}
 
+	public function createUrlResource(string $url): FileResource
+	{
+		$resource = new UrlResource($url);
+		$resource->setNamespace($this->namespace);
+		return $resource;
+	}
+
 	public function createResource(string $file, string $filename = null): FileResource
 	{
 		$resource = new FileResource($file, $filename);
@@ -65,11 +73,25 @@ class ImageStorage
 			if ($resource instanceof UploadFileResource) {
 				$resource->file->move($this->path . '/' . $resource->getIdentifier());
 				return true;
+
+			} elseif ($resource instanceof UrlResource) {
+				$ctx = stream_context_create([
+					'http' => ['timeout' => 10]
+				]);
+				$data = @file_get_contents($resource->file, false, $ctx);
+				if ($data) {
+					$source = $this->path . '/' . $resource->getIdentifier();
+					@mkdir(dirname($source), 0777, true);
+					file_put_contents($source, $data);
+					return true;
+				}
+				return false;
+
 			} elseif ($resource instanceof Resource) {
 				$source = $this->path . '/' . $resource->getIdentifier();
 				@mkdir(dirname($source), 0777, true);
-
 				return @rename($resource->file, $source);
+
 			} else {
 				$source = $this->path . '/' . $resource->getIdentifier();
 				@mkdir(dirname($source), 0777, true);
