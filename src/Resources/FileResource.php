@@ -13,6 +13,8 @@ use Nette\Utils\Random;
  * Class FileResource
  *
  * @property-read string $file
+ * @property-read string $filename
+ * @property-read string $namespace
  *
  * @author Attreid <attreid@gmail.com>
  */
@@ -41,6 +43,16 @@ class FileResource
 	protected function getFile()
 	{
 		return $this->file;
+	}
+
+	protected function getNamespace(): string
+	{
+		return $this->namespace;
+	}
+
+	protected function getFilename(): string
+	{
+		return $this->filename;
 	}
 
 	public function getIdentifier(): string

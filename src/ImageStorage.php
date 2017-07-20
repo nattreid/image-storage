@@ -8,6 +8,8 @@ use NAttreid\ImageStorage\Resources\FileResource;
 use NAttreid\ImageStorage\Resources\Resource;
 use NAttreid\ImageStorage\Resources\UploadFileResource;
 use Nette\Http\FileUpload;
+use Nette\Utils\Finder;
+use Tracy\Debugger;
 
 /**
  * Class ImageStorage
@@ -25,13 +27,17 @@ class ImageStorage
 	/** @var ImageFactory */
 	private $imageFactory;
 
-	public function __construct(string $path, ImageFactory $imageFactory)
+	/** @var string */
+	private $dir;
+
+	public function __construct(string $path, string $dir, ImageFactory $imageFactory)
 	{
 		$this->path = $path;
+		$this->dir = $dir;
 		$this->imageFactory = $imageFactory;
 	}
 
-	public function setNamespace(string $namespace)
+	public function setNamespace(?string $namespace)
 	{
 		$this->namespace = $namespace;
 	}
@@ -72,10 +78,13 @@ class ImageStorage
 
 	public function delete($identifier): bool
 	{
-
+		$resource = $this->getResource($identifier);
+		foreach (Finder::findFiles($resource->fileName)->from($this->dir . '/' . $resource->namespace) as $file) {
+			Debugger::barDump($file);
+		}
 	}
 
-	public function getResource($identifier, string $size = null, string $flag = null, int $quality): Resource
+	public function getResource($identifier, string $size = null, string $flag = null, int $quality = null): Resource
 	{
 		$namespace = substr($identifier, 0, strrpos($identifier, '/'));
 		$resource = new Resource($this->path . '/' . $identifier);

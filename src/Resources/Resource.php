@@ -38,14 +38,16 @@ class Resource extends FileResource
 
 	public function setSize(?string $size): void
 	{
-		list($width, $height) = explode('x', $size);
-		$this->width = intval($width) ?: null;
-		$this->height = intval($height) ?: null;
+		if ($size !== null) {
+			list($width, $height) = explode('x', $size);
+			$this->width = intval($width) ?: null;
+			$this->height = intval($height) ?: null;
+		}
 	}
 
 	public function setFlag(?string $flag): void
 	{
-		$this->flag = Image::${Strings::upper($flag)};
+		$this->flag = @constant(Image::class . '::' . trim(Strings::upper($flag)));
 	}
 
 	protected function getQuality(): ?int

@@ -31,7 +31,7 @@ class ImageFactory
 	{
 		$this->dir = $dir;
 		$this->path = $path;
-		$this->flag = Image::${Strings::upper($flag)};
+		$this->flag = @constant(Image::class . '::' . trim(Strings::upper($flag)));
 		$this->quality = $quality;
 	}
 

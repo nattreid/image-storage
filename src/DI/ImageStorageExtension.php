@@ -37,7 +37,8 @@ class ImageStorageExtension extends CompilerExtension
 		$builder->addDefinition($this->prefix('storage'))
 			->setClass(ImageStorage::class)
 			->setArguments([
-				$config['path']
+				$config['path'],
+				$config['wwwDir'] . '/' . $config['dir']
 			]);
 
 		$builder->addDefinition($this->prefix('factory'))
