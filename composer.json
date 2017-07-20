@@ -1,0 +1,30 @@
+{
+  "name": "nattreid/image-storage",
+  "description": "Image storage for Nette Framework",
+  "type": "library",
+  "license": [
+    "MIT"
+  ],
+  "authors": [
+    {
+      "name": "Attreid",
+      "email": "attreid@gmail.com"
+    }
+  ],
+  "require": {
+    "php": ">= 7.1",
+    "nette/di": "~2.4",
+    "nette/http": "~2.4",
+    "nattreid/utils": "~1.2"
+  },
+  "require-dev": {
+    "nette/tester": "~1.7",
+    "tracy/tracy": "~2.4",
+    "latte/latte": "~2.4"
+  },
+  "autoload": {
+    "classmap": [
+      "src/"
+    ]
+  }
+}
