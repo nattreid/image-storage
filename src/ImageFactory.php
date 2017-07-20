@@ -64,7 +64,7 @@ class ImageFactory
 
 	public function create(Resource $resource): string
 	{
-		$source = $this->path . '/' . $resource->getIdentifier();
+		$source = $resource->file;
 		if (!$resource->isOk() || !$resource->isImage()) {
 			if ($this->noImage === null) {
 				throw new UnknownImageFileException("File '$source' not found.");
@@ -72,7 +72,7 @@ class ImageFactory
 			return $this->create($this->getNoImage($resource));
 		}
 		$link = $resource->createLink();
-		$path = $this->publicDir . '/' . $resource->createLink();
+		$path = $this->publicDir . '/' . $link;
 		if (!file_exists($path)) {
 			@mkdir(dirname($path), 0777, true);
 
