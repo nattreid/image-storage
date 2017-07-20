@@ -37,7 +37,7 @@ class FileResource
 	public function __construct($file, string $filename = null)
 	{
 		$this->file = $file;
-		$this->filename = $fileName ?? basename($this->file);
+		$this->filename = $filename ?? basename($this->file);
 	}
 
 	protected function getFile()
@@ -45,7 +45,7 @@ class FileResource
 		return $this->file;
 	}
 
-	protected function getNamespace(): string
+	protected function getNamespace(): ?string
 	{
 		return $this->namespace;
 	}
@@ -57,7 +57,12 @@ class FileResource
 
 	public function getIdentifier(): string
 	{
-		return $this->namespace . '/' . $this->filename;
+		$identifier = $this->namespace;
+		if ($identifier) {
+			$identifier .= '/';
+		}
+		$identifier .= $this->filename;
+		return $identifier;
 	}
 
 	public function checkIdentifier(string $path): void
@@ -95,12 +100,17 @@ class FileResource
 			}
 			$this->namespace = Strings::replace($namespace, '/\s+/', '');
 		}
-		$this->namespace = null;
+		$this->namespace = $namespace;
 	}
 
 	public function isImage(): bool
 	{
 		return in_array($this->getContentType(), ['image/gif', 'image/png', 'image/jpeg', 'image/svg+xml'], true);
+	}
+
+	public function isSvg(): bool
+	{
+		return $this->getContentType() === 'image/svg+xml';
 	}
 
 	public function __toString()

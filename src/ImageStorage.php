@@ -9,7 +9,6 @@ use NAttreid\ImageStorage\Resources\Resource;
 use NAttreid\ImageStorage\Resources\UploadFileResource;
 use Nette\Http\FileUpload;
 use Nette\Utils\Finder;
-use Tracy\Debugger;
 
 /**
  * Class ImageStorage
@@ -28,12 +27,12 @@ class ImageStorage
 	private $imageFactory;
 
 	/** @var string */
-	private $dir;
+	private $publicDir;
 
-	public function __construct(string $path, string $dir, ImageFactory $imageFactory)
+	public function __construct(string $path, string $publicDir, ImageFactory $imageFactory)
 	{
 		$this->path = $path;
-		$this->dir = $dir;
+		$this->publicDir = $publicDir;
 		$this->imageFactory = $imageFactory;
 	}
 
@@ -52,9 +51,9 @@ class ImageStorage
 		return $resource;
 	}
 
-	public function createResource(string $file): FileResource
+	public function createResource(string $file, string $filename = null): FileResource
 	{
-		$resource = new FileResource($file);
+		$resource = new FileResource($file, $filename);
 		$resource->setNamespace($this->namespace);
 		return $resource;
 	}
@@ -66,6 +65,11 @@ class ImageStorage
 			if ($resource instanceof UploadFileResource) {
 				$resource->file->move($this->path . '/' . $resource->getIdentifier());
 				return true;
+			} elseif ($resource instanceof Resource) {
+				$source = $this->path . '/' . $resource->getIdentifier();
+				@mkdir(dirname($source), 0777, true);
+
+				return @rename($resource->file, $source);
 			} else {
 				$source = $this->path . '/' . $resource->getIdentifier();
 				@mkdir(dirname($source), 0777, true);
@@ -76,22 +80,38 @@ class ImageStorage
 		return false;
 	}
 
-	public function delete($identifier): bool
+	/**
+	 * @param string[]|string $identifiers
+	 */
+	public function delete($identifiers): void
 	{
-		$resource = $this->getResource($identifier);
-		foreach (Finder::findFiles($resource->fileName)->from($this->dir . '/' . $resource->namespace) as $file) {
-			Debugger::barDump($file);
+		if (!is_array($identifiers)) {
+			$identifiers = [$identifiers];
+		}
+		foreach ($identifiers as $identifier) {
+			$resource = $this->getResource($identifier);
+			$path = $this->publicDir . '/' . $resource->namespace;
+			if (file_exists($path)) {
+				foreach (Finder::findFiles($resource->filename)->from($path) as $file) {
+					@unlink((string) $file);
+				}
+			}
+			@unlink($resource->file);
 		}
 	}
 
-	public function getResource($identifier, string $size = null, string $flag = null, int $quality = null): Resource
+	public function getResource(?string $identifier, string $size = null, string $flag = null, int $quality = null): Resource
 	{
-		$namespace = substr($identifier, 0, strrpos($identifier, '/'));
 		$resource = new Resource($this->path . '/' . $identifier);
 		$resource->setSize($size);
 		$resource->setFlag($flag);
 		$resource->setQuality($quality);
-		$resource->setNamespace($namespace);
+
+		if ($identifier !== null) {
+			$namespace = $this->imageFactory->parseNamespace($identifier);
+			$resource->setNamespace($namespace);
+		}
+
 		return $resource;
 	}
 

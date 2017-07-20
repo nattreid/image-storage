@@ -12,7 +12,7 @@ use Nette\Utils\Image;
  *
  * @property-read ?int $width
  * @property-read ?int $height
- * @property-read ?string $flag
+ * @property-read ?int $flag
  * @property-read ?int $quality
  *
  * @author Attreid <attreid@gmail.com>
@@ -25,7 +25,7 @@ class Resource extends FileResource
 	/** @var int */
 	private $height;
 
-	/** @var string */
+	/** @var int */
 	private $flag;
 
 	/** @var int */
@@ -39,7 +39,7 @@ class Resource extends FileResource
 	public function setSize(?string $size): void
 	{
 		if ($size !== null) {
-			list($width, $height) = explode('x', $size);
+			@list($width, $height) = explode('x', $size);
 			$this->width = intval($width) ?: null;
 			$this->height = intval($height) ?: null;
 		}
@@ -55,19 +55,35 @@ class Resource extends FileResource
 		return $this->quality;
 	}
 
-	protected function getSize(): ?string
+	protected function getWidth(): ?int
 	{
-		return $this->size;
+		return $this->width;
 	}
 
-	protected function getFlag(): ?string
+	protected function getHeight(): ?int
+	{
+		return $this->height;
+	}
+
+	protected function getFlag(): ?int
 	{
 		return $this->flag;
 	}
 
+	public function cloneSettings($origResource)
+	{
+		$this->flag = $origResource->flag;
+		$this->width = $origResource->width;
+		$this->height = $origResource->height;
+		$this->quality = $origResource->quality;
+	}
+
 	public function createLink(): string
 	{
-		$link = $this->namespace . '/';
+		$link = $this->namespace;
+		if ($link) {
+			$link .= '/';
+		}
 
 		$dirName = $this->createDirName();
 		if ($dirName) {
@@ -82,20 +98,24 @@ class Resource extends FileResource
 	private function createDirName(): string
 	{
 		$name = '';
+		if (!$this->isSvg()) {
+			if ($this->width !== null) {
+				$name .= $this->width;
+			}
+			if ($this->height !== null) {
+				$name .= 'x' . $this->height;
+			}
 
-		if ($this->width !== null) {
-			$name .= $this->width;
-		}
-		if ($this->height !== null) {
-			$name .= 'x' . $this->height;
-		}
+			if ($this->quality !== null) {
+				$name .= 'q' . $this->quality;
+			}
 
-		if ($this->quality !== null) {
-			$name .= 'q' . $this->quality;
+			if ($this->flag !== null) {
+				$name .= '_' . $this->flag;
+			}
 		}
-
-		if ($this->flag !== null) {
-			$name .= '_' . $this->flag;
+		if ($name === '') {
+			$name = 'orig';
 		}
 
 		return $name;
