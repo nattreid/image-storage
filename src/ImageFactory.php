@@ -77,7 +77,7 @@ class ImageFactory
 			@mkdir(dirname($path), 0777, true);
 
 			if ($resource->isSvg()) {
-				copy($source, $path);
+				@copy($source, $path);
 			} else {
 				$image = Image::fromFile($source);
 				if ($resource->width || $resource->height) {
@@ -93,6 +93,4 @@ class ImageFactory
 		}
 		return '/' . $this->relativePublicDir . '/' . $link;
 	}
-
-
 }
