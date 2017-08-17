@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace NAttreid\ImageStorage;
 
-use NAttreid\ImageStorage\Resources\Resource;
+use NAttreid\ImageStorage\Resources\ImageResource;
 use NAttreid\Utils\Strings;
 use Nette\Utils\Image;
 use Nette\Utils\UnknownImageFileException;
@@ -44,9 +44,9 @@ class ImageFactory
 		$this->noImage = $noImage;
 	}
 
-	private function getNoImage(Resource $origResource): Resource
+	private function getNoImage(ImageResource $origResource): ImageResource
 	{
-		$resource = new Resource($this->path . '/' . $this->noImage);
+		$resource = new ImageResource($this->path . '/' . $this->noImage);
 		$resource->cloneSettings($origResource);
 		$resource->setNamespace($this->parseNamespace($this->noImage));
 
@@ -62,7 +62,7 @@ class ImageFactory
 		return null;
 	}
 
-	public function create(Resource $resource): string
+	public function create(ImageResource $resource): string
 	{
 		$source = $resource->file;
 		if (!$resource->isOk() || !$resource->isImage()) {

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace NAttreid\ImageStorage;
 
 use NAttreid\ImageStorage\Resources\FileResource;
-use NAttreid\ImageStorage\Resources\Resource;
+use NAttreid\ImageStorage\Resources\ImageResource;
 use NAttreid\ImageStorage\Resources\UploadFileResource;
 use NAttreid\ImageStorage\Resources\UrlResource;
 use Nette\Http\FileUpload;
@@ -87,7 +87,7 @@ class ImageStorage
 				}
 				return false;
 
-			} elseif ($resource instanceof Resource) {
+			} elseif ($resource instanceof ImageResource) {
 				$source = $this->path . '/' . $resource->getIdentifier();
 				@mkdir(dirname($source), 0777, true);
 				return @rename($resource->file, $source);
@@ -122,9 +122,9 @@ class ImageStorage
 		}
 	}
 
-	public function getResource(?string $identifier, string $size = null, string $flag = null, int $quality = null): Resource
+	public function getResource(?string $identifier, string $size = null, string $flag = null, int $quality = null): ImageResource
 	{
-		$resource = new Resource($this->path . '/' . $identifier);
+		$resource = new ImageResource($this->path . '/' . $identifier);
 		$resource->setSize($size);
 		$resource->setFlag($flag);
 		$resource->setQuality($quality);
@@ -137,7 +137,7 @@ class ImageStorage
 		return $resource;
 	}
 
-	public function link(Resource $resource): string
+	public function link(ImageResource $resource): string
 	{
 		return $this->imageFactory->create($resource);
 	}

@@ -8,7 +8,7 @@ use NAttreid\Utils\Strings;
 use Nette\Utils\Image;
 
 /**
- * Class Resource
+ * Class ImageResource
  *
  * @property-read ?int $width
  * @property-read ?int $height
@@ -17,7 +17,7 @@ use Nette\Utils\Image;
  *
  * @author Attreid <attreid@gmail.com>
  */
-class Resource extends FileResource
+class ImageResource extends FileResource
 {
 	/** @var int */
 	private $width;
