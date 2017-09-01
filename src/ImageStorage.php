@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace NAttreid\ImageStorage;
 
+use GuzzleHttp\Client;
+use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Exception\ConnectException;
 use NAttreid\ImageStorage\Resources\FileResource;
 use NAttreid\ImageStorage\Resources\ImageResource;
 use NAttreid\ImageStorage\Resources\UploadFileResource;
@@ -33,7 +36,7 @@ class ImageStorage
 	/** @var int */
 	private $timeout;
 
-	public function __construct(string $path, string $publicDir,int $timeout, ImageFactory $imageFactory)
+	public function __construct(string $path, string $publicDir, int $timeout, ImageFactory $imageFactory)
 	{
 		$this->path = $path;
 		$this->publicDir = $publicDir;
@@ -41,7 +44,7 @@ class ImageStorage
 		$this->timeout = $timeout;
 	}
 
-	public function setNamespace(?string $namespace):void
+	public function setNamespace(?string $namespace): void
 	{
 		$this->namespace = $namespace;
 	}
@@ -69,42 +72,6 @@ class ImageStorage
 		$resource = new FileResource($file, $filename);
 		$resource->setNamespace($this->namespace);
 		return $resource;
-	}
-
-	public function save(FileResource $resource): bool
-	{
-		if ($resource->isOk() && $resource->isImage()) {
-			$resource->checkIdentifier($this->path);
-			if ($resource instanceof UploadFileResource) {
-				$resource->file->move($this->path . '/' . $resource->getIdentifier());
-				return true;
-
-			} elseif ($resource instanceof UrlResource) {
-				$ctx = stream_context_create([
-					'http' => ['timeout' => 10]
-				]);
-				$data = @file_get_contents($resource->file, false, $ctx);
-				if ($data) {
-					$source = $this->path . '/' . $resource->getIdentifier();
-					@mkdir(dirname($source), 0777, true);
-					file_put_contents($source, $data);
-					return true;
-				}
-				return false;
-
-			} elseif ($resource instanceof ImageResource) {
-				$source = $this->path . '/' . $resource->getIdentifier();
-				@mkdir(dirname($source), 0777, true);
-				return @rename($resource->file, $source);
-
-			} else {
-				$source = $this->path . '/' . $resource->getIdentifier();
-				@mkdir(dirname($source), 0777, true);
-
-				return @copy($resource->file, $source);
-			}
-		}
-		return false;
 	}
 
 	/**
@@ -145,6 +112,62 @@ class ImageStorage
 	public function link(ImageResource $resource): string
 	{
 		return $this->imageFactory->create($resource);
+	}
+
+	public function save(FileResource $resource): bool
+	{
+		if ($resource->isOk() && $resource->isImage()) {
+			$resource->checkIdentifier($this->path);
+			if ($resource instanceof UploadFileResource) {
+				return $this->processUploadFileResource($resource);
+			} elseif ($resource instanceof UrlResource) {
+				return $this->processUrlResource($resource);
+			} elseif ($resource instanceof ImageResource) {
+				return $this->processImageResource($resource);
+			} else {
+				return $this->copyResource($resource);
+			}
+		}
+		return false;
+	}
+
+	private function processUploadFileResource(UploadFileResource $resource): bool
+	{
+		$resource->file->move($this->path . '/' . $resource->getIdentifier());
+		return true;
+	}
+
+	private function processUrlResource(UrlResource $resource): bool
+	{
+		$client = new Client([
+			'timeout' => $this->timeout
+		]);
+		try {
+			$response = $client->get($resource->file);
+			$data = $response->getBody()->getContents();
+			if ($data) {
+				$source = $this->path . '/' . $resource->getIdentifier();
+				@mkdir(dirname($source), 0777, true);
+				file_put_contents($source, $data);
+				return true;
+			}
+		} catch (ClientException|ConnectException $ex) {
+		}
+		return false;
+	}
+
+	private function processImageResource(ImageResource $resource): bool
+	{
+		$source = $this->path . '/' . $resource->getIdentifier();
+		@mkdir(dirname($source), 0777, true);
+		return @rename($resource->file, $source);
+	}
+
+	private function copyResource(FileResource $resource): bool
+	{
+		$source = $this->path . '/' . $resource->getIdentifier();
+		@mkdir(dirname($source), 0777, true);
+		return @copy($resource->file, $source);
 	}
 
 }
