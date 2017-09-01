@@ -11,6 +11,7 @@ images:
     publicDir: 'assets'
     quality: 85
     defaultFlag: 'fit'
+    timeout: 10
 ```
 
 ## Použití v presenteru
