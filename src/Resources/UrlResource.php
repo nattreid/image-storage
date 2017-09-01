@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace NAttreid\ImageStorage\Resources;
 
-use Nette\Utils\Strings;
+use GuzzleHttp\Client;
+use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Exception\ConnectException;
+use Psr\Http\Message\ResponseInterface;
 
 /**
  * Class UrlResource
@@ -13,26 +16,40 @@ use Nette\Utils\Strings;
  */
 class UrlResource extends FileResource
 {
-	/** @var string[]|false */
-	private $headers;
+	/** @var ResponseInterface|null */
+	private $response;
+
+	/** @var int */
+	private $timeout;
 
 	public function __construct(string $url)
 	{
 		parent::__construct($url);
 	}
 
-	private function getHeaders()
+	public function setTimeOut(int $timeout): void
 	{
-		if ($this->headers === null) {
-			$this->headers = @get_headers($this->file, 1);
+		$this->timeout = $timeout;
+	}
+
+	private function getResponse(): ?ResponseInterface
+	{
+		if ($this->response === null) {
+			$client = new Client([
+				'timeout' => $this->timeout
+			]);
+			try {
+				$this->response = $client->head($this->file);
+			} catch (ClientException|ConnectException $ex) {
+			}
 		}
-		return $this->headers;
+		return $this->response;
 	}
 
 	public function isOk(): bool
 	{
-		$headers = $this->getHeaders();
-		if ($headers && Strings::contains($headers[0], '200 OK')) {
+		$response = $this->getResponse();
+		if ($response && $response->getStatusCode() === 200) {
 			return true;
 		}
 		return false;
@@ -41,8 +58,8 @@ class UrlResource extends FileResource
 	protected function getContentType(): ?string
 	{
 		if ($this->isOk() && $this->type === null) {
-			$headers = $this->getHeaders();
-			$this->type = $headers['Content-Type'];
+			$response = $this->getResponse();
+			$this->type = $response->getHeader('Content-Type')[0];
 		}
 		return $this->type;
 	}

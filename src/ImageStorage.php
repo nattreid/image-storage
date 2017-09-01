@@ -30,14 +30,18 @@ class ImageStorage
 	/** @var string */
 	private $publicDir;
 
-	public function __construct(string $path, string $publicDir, ImageFactory $imageFactory)
+	/** @var int */
+	private $timeout;
+
+	public function __construct(string $path, string $publicDir,int $timeout, ImageFactory $imageFactory)
 	{
 		$this->path = $path;
 		$this->publicDir = $publicDir;
 		$this->imageFactory = $imageFactory;
+		$this->timeout = $timeout;
 	}
 
-	public function setNamespace(?string $namespace)
+	public function setNamespace(?string $namespace):void
 	{
 		$this->namespace = $namespace;
 	}
@@ -56,6 +60,7 @@ class ImageStorage
 	{
 		$resource = new UrlResource($url);
 		$resource->setNamespace($this->namespace);
+		$resource->setTimeOut($this->timeout);
 		return $resource;
 	}
 

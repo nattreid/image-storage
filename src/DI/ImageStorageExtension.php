@@ -23,7 +23,8 @@ class ImageStorageExtension extends CompilerExtension
 		'publicDir' => 'assets',
 		'quality' => 85,
 		'defaultFlag' => 'fit',
-		'noImage' => null
+		'noImage' => null,
+		'timeout' => 10
 	];
 
 	public function loadConfiguration(): void
@@ -38,7 +39,8 @@ class ImageStorageExtension extends CompilerExtension
 			->setClass(ImageStorage::class)
 			->setArguments([
 				$config['assetsPath'],
-				$config['wwwDir'] . '/' . $config['publicDir']
+				$config['wwwDir'] . '/' . $config['publicDir'],
+				$config['timeout']
 			]);
 
 		$builder->addDefinition($this->prefix('factory'))

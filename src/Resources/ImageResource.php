@@ -70,7 +70,7 @@ class ImageResource extends FileResource
 		return $this->flag;
 	}
 
-	public function cloneSettings($origResource)
+	public function cloneSettings($origResource): void
 	{
 		$this->flag = $origResource->flag;
 		$this->width = $origResource->width;

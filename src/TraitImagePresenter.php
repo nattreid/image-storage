@@ -10,7 +10,7 @@ trait TraitImagePresenter
 	/** @var ImageStorage */
 	protected $imageStorage;
 
-	public function injectImageStorage(ImageStorage $imageStorage)
+	public function injectImageStorage(ImageStorage $imageStorage): void
 	{
 		$this->imageStorage = $imageStorage;
 	}

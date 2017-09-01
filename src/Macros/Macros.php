@@ -12,7 +12,7 @@ use Latte\PhpWriter;
 class Macros extends MacroSet
 {
 
-	public static function install(Compiler $compiler)
+	public static function install(Compiler $compiler): void
 	{
 		$me = new static($compiler);
 
@@ -24,7 +24,7 @@ class Macros extends MacroSet
 	 * @param PhpWriter $writer
 	 * @return string
 	 */
-	public function beginImg(MacroNode $node, PhpWriter $writer)
+	public function beginImg(MacroNode $node, PhpWriter $writer): string
 	{
 		return $writer->write('echo $imageStorage->link($imageStorage->getResource(%node.args));');
 	}
@@ -34,7 +34,7 @@ class Macros extends MacroSet
 	 * @param PhpWriter $writer
 	 * @return string
 	 */
-	public function attrImg(MacroNode $node, PhpWriter $writer)
+	public function attrImg(MacroNode $node, PhpWriter $writer):string
 	{
 		if ($node->htmlNode->name === 'a') {
 			$attr = 'href=';
