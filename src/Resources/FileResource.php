@@ -40,7 +40,7 @@ class FileResource
 		$this->filename = $filename ?? trim(Strings::webalize(basename($this->file), '.', false), '.-');
 	}
 
-	protected function getFile():string
+	protected function getFile()
 	{
 		return $this->file;
 	}
