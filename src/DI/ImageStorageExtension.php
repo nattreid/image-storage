@@ -36,7 +36,7 @@ class ImageStorageExtension extends CompilerExtension
 		$config['wwwDir'] = Helpers::expand($config['wwwDir'], $builder->parameters);
 
 		$builder->addDefinition($this->prefix('storage'))
-			->setClass(ImageStorage::class)
+			->setType(ImageStorage::class)
 			->setArguments([
 				$config['assetsPath'],
 				$config['wwwDir'] . '/' . $config['publicDir'],
@@ -44,7 +44,7 @@ class ImageStorageExtension extends CompilerExtension
 			]);
 
 		$builder->addDefinition($this->prefix('factory'))
-			->setClass(ImageFactory::class)
+			->setType(ImageFactory::class)
 			->setArguments([
 				$config['assetsPath'],
 				$config['wwwDir'] . '/' . $config['publicDir'],
