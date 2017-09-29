@@ -7,6 +7,7 @@ namespace NAttreid\ImageStorage\Resources;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\ConnectException;
+use GuzzleHttp\Exception\ServerException;
 use Psr\Http\Message\ResponseInterface;
 
 /**
@@ -40,7 +41,7 @@ class UrlResource extends FileResource
 			]);
 			try {
 				$this->response = $client->head($this->file);
-			} catch (ClientException|ConnectException $ex) {
+			} catch (ClientException|ConnectException|ServerException $ex) {
 			}
 		}
 		return $this->response;
