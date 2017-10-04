@@ -7,6 +7,7 @@ namespace NAttreid\ImageStorage;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\ConnectException;
+use GuzzleHttp\Exception\ServerException;
 use NAttreid\ImageStorage\Resources\FileResource;
 use NAttreid\ImageStorage\Resources\ImageResource;
 use NAttreid\ImageStorage\Resources\UploadFileResource;
@@ -151,7 +152,7 @@ class ImageStorage
 				file_put_contents($source, $data);
 				return true;
 			}
-		} catch (ClientException|ConnectException $ex) {
+		} catch (ClientException|ConnectException|ServerException $ex) {
 		}
 		return false;
 	}
