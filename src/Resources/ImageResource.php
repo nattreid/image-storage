@@ -10,10 +10,10 @@ use Nette\Utils\Image;
 /**
  * Class ImageResource
  *
- * @property-read ?int $width
- * @property-read ?int $height
- * @property-read ?int $flag
- * @property-read ?int $quality
+ * @property-read int|null $width
+ * @property-read int|null $height
+ * @property-read int|null $flag
+ * @property-read int|null $quality
  *
  * @author Attreid <attreid@gmail.com>
  */

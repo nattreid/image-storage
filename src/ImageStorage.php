@@ -110,6 +110,11 @@ class ImageStorage
 		return $resource;
 	}
 
+	/**
+	 * @param ImageResource $resource
+	 * @return string
+	 * @throws \Nette\Utils\UnknownImageFileException
+	 */
 	public function link(ImageResource $resource): string
 	{
 		return $this->imageFactory->create($resource);

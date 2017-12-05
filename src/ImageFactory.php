@@ -62,6 +62,11 @@ class ImageFactory
 		return null;
 	}
 
+	/**
+	 * @param ImageResource $resource
+	 * @return string
+	 * @throws UnknownImageFileException
+	 */
 	public function create(ImageResource $resource): string
 	{
 		$source = $resource->file;
