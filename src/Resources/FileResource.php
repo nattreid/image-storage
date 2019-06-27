@@ -76,7 +76,7 @@ class FileResource
 	protected function getContentType(): ?string
 	{
 		if ($this->isOk() && $this->type === null) {
-			$this->type = finfo_file(finfo_open(FILEINFO_MIME_TYPE), $this->file);
+			$this->type = finfo_file(finfo_open(FILEINFO_MIME_TYPE), $this->file) ?: null;
 		}
 		return $this->type;
 	}
