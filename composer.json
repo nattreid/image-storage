@@ -15,7 +15,8 @@
     "php": ">= 7.1",
     "nette/di": "~2.4",
     "nette/http": "~2.4",
-    "nattreid/utils": "~1.2"
+    "nattreid/utils": "~1.2",
+    "ext-fileinfo": "*"
   },
   "require-dev": {
     "nette/tester": "~1.7",
