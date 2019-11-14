@@ -137,6 +137,15 @@ class ImageStorage
 		return false;
 	}
 
+	public function copy(ImageResource $resource): bool
+	{
+		if ($resource->isOk() && $resource->isImage()) {
+			$resource->checkIdentifier($this->path);
+			return $this->copyResource($resource);
+		}
+		return false;
+	}
+
 	private function processUploadFileResource(UploadFileResource $resource): bool
 	{
 		$resource->file->move($this->path . '/' . $resource->getIdentifier());
