@@ -76,8 +76,12 @@ class FileResource
 
 	protected function getContentType(): ?string
 	{
-		if ($this->isOk() && $this->type === null) {
-			$this->type = @finfo_file(finfo_open(FILEINFO_MIME_TYPE), $this->file) ?: null;
+		if ($this->type === null) {
+			if ($this->isOk()) {
+				$this->type = @finfo_file(finfo_open(FILEINFO_MIME_TYPE), $this->file) ?: null;
+			} else {
+				$this->type = Strings::endsWith($this->filename, '.svg') ? 'image/svg+xml' : null;
+			}
 		}
 		return $this->type;
 	}

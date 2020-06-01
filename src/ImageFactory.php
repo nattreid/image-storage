@@ -64,13 +64,14 @@ class ImageFactory
 
 	/**
 	 * @param ImageResource $resource
+	 * @param string|null $domain
 	 * @return string
 	 * @throws UnknownImageFileException
 	 */
-	public function create(ImageResource $resource): string
+	public function create(ImageResource $resource, string $domain = null): string
 	{
 		$source = $resource->file;
-		if (!$resource->isOk() || !$resource->isImage()) {
+		if ($domain === null && (!$resource->isOk() || !$resource->isImage())) {
 			if ($this->noImage === null) {
 				throw new UnknownImageFileException("File '$source' not found.");
 			}
@@ -78,7 +79,7 @@ class ImageFactory
 		}
 		$link = $resource->createLink();
 		$path = $this->publicDir . '/' . $link;
-		if (!file_exists($path)) {
+		if ($domain === null && !file_exists($path)) {
 			@mkdir(dirname($path), 0777, true);
 
 			if ($resource->isSvg()) {
@@ -96,6 +97,6 @@ class ImageFactory
 				$image->save($path, $resource->quality ?? $this->quality);
 			}
 		}
-		return '/' . $this->relativePublicDir . '/' . $link;
+		return ($domain ?? '') . '/' . $this->relativePublicDir . '/' . $link;
 	}
 }

@@ -24,6 +24,7 @@ class ImageStorageExtension extends CompilerExtension
 		'quality' => 85,
 		'defaultFlag' => 'fit',
 		'noImage' => null,
+		'domain' => null,
 		'timeout' => 10
 	];
 
@@ -40,6 +41,7 @@ class ImageStorageExtension extends CompilerExtension
 			->setArguments([
 				$config['assetsPath'],
 				$config['wwwDir'] . '/' . $config['publicDir'],
+				$config['domain'],
 				$config['timeout']
 			]);
 

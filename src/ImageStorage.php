@@ -28,6 +28,9 @@ class ImageStorage
 	/** @var string */
 	private $namespace;
 
+	/** @var string */
+	private $domain;
+
 	/** @var ImageFactory */
 	private $imageFactory;
 
@@ -37,17 +40,23 @@ class ImageStorage
 	/** @var int */
 	private $timeout;
 
-	public function __construct(string $path, string $publicDir, int $timeout, ImageFactory $imageFactory)
+	public function __construct(string $path, string $publicDir, ?string $domain, int $timeout, ImageFactory $imageFactory)
 	{
 		$this->path = $path;
 		$this->publicDir = $publicDir;
 		$this->imageFactory = $imageFactory;
+		$this->domain = $domain;
 		$this->timeout = $timeout;
 	}
 
-	public function setNamespace(?string $namespace): void
+	public function setNamespace(string $namespace = null): void
 	{
 		$this->namespace = $namespace;
+	}
+
+	public function setDomain(string $domain = null): void
+	{
+		$this->domain = $domain;
 	}
 
 	public function createUploadedResource(FileUpload $fileUpload): ?FileResource
@@ -117,7 +126,7 @@ class ImageStorage
 	 */
 	public function link(ImageResource $resource): string
 	{
-		return $this->imageFactory->create($resource);
+		return $this->imageFactory->create($resource, $this->domain);
 	}
 
 	public function save(FileResource $resource): bool

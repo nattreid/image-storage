@@ -11,6 +11,7 @@ images:
     publicDir: 'assets'
     quality: 85
     defaultFlag: 'fit'
+    domain: '//domena/' # zobrazi url obrazku na jine domene
     timeout: 10
 ```
 
