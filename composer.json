@@ -13,8 +13,8 @@
   ],
   "require": {
     "php": ">= 7.1",
-    "nette/di": "~2.4",
-    "nette/http": "~2.4",
+    "nette/di": "~3.0",
+    "nette/http": "~3.0",
     "nattreid/utils": "~1.2",
     "ext-fileinfo": "*"
   },
@@ -22,7 +22,7 @@
     "nette/tester": "~1.7",
     "tracy/tracy": "~2.4",
     "latte/latte": "~2.4",
-    "nette/application": "~2.4",
+    "nette/application": "~3.0",
     "guzzlehttp/guzzle": "~6.2"
   },
   "autoload": {
