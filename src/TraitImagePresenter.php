@@ -2,7 +2,7 @@
 
 namespace NAttreid\ImageStorage;
 
-use Nette\Application\UI\ITemplate;
+use Nette\Application\UI\Template;
 
 trait TraitImagePresenter
 {
@@ -15,13 +15,9 @@ trait TraitImagePresenter
 		$this->imageStorage = $imageStorage;
 	}
 
-	/**
-	 * @param ITemplate $template
-	 * @return ITemplate
-	 */
-	public function createTemplate($template = NULL)
+	public function createTemplate(): Template
 	{
-		$template = $template ?: parent::createTemplate();
+		$template = parent::createTemplate();
 
 		$template->imageStorage = $this->imageStorage;
 

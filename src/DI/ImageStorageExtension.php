@@ -61,6 +61,7 @@ class ImageStorageExtension extends CompilerExtension
 	{
 		$builder = $this->getContainerBuilder();
 		$builder->getDefinition('nette.latteFactory')
+			->getResultDefinition()
 			->addSetup(Macros::class . '::install(?->getCompiler())', array('@self'));
 	}
 }
