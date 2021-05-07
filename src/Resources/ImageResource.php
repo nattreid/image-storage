@@ -47,7 +47,11 @@ class ImageResource extends FileResource
 
 	public function setFlag(?string $flag): void
 	{
-		$this->flag = @constant(Image::class . '::' . trim(Strings::upper($flag)));
+		if ($flag === null) {
+			$this->flag === null;
+		} else {
+			$this->flag = @constant(Image::class . '::' . trim(Strings::upper($flag)));
+		}
 	}
 
 	protected function getQuality(): ?int
