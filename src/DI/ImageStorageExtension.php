@@ -21,6 +21,7 @@ class ImageStorageExtension extends CompilerExtension
 		'assetsPath' => '%wwwDir%/../assets',
 		'wwwDir' => '%wwwDir%',
 		'publicDir' => 'assets',
+		'relativePatch' => null,
 		'quality' => 85,
 		'defaultFlag' => 'fit',
 		'noImage' => null,
@@ -35,6 +36,7 @@ class ImageStorageExtension extends CompilerExtension
 
 		$config['assetsPath'] = Helpers::expand($config['assetsPath'], $builder->parameters);
 		$config['wwwDir'] = Helpers::expand($config['wwwDir'], $builder->parameters);
+		$config['relativePatch'] = $config['relativePatch'] ?? $config['publicDir'];
 
 		$builder->addDefinition($this->prefix('storage'))
 			->setType(ImageStorage::class)
@@ -50,7 +52,7 @@ class ImageStorageExtension extends CompilerExtension
 			->setArguments([
 				$config['assetsPath'],
 				$config['wwwDir'] . '/' . $config['publicDir'],
-				$config['publicDir'],
+				$config['relativePatch'],
 				$config['noImage'],
 				$config['quality'],
 				$config['defaultFlag']
