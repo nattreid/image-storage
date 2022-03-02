@@ -7,23 +7,22 @@
   ],
   "authors": [
     {
-      "name": "Attreid",
-      "email": "attreid@gmail.com"
+      "name": "Attreid"
     }
   ],
   "require": {
+    "ext-fileinfo": "*",
     "php": ">= 7.4",
     "nette/di": "~3.0",
     "nette/http": "~3.0",
     "nattreid/utils": "~2.0",
-    "ext-fileinfo": "*"
+    "guzzlehttp/guzzle": "~7.4"
   },
   "require-dev": {
     "nette/tester": "~1.7",
-    "tracy/tracy": "~2.4",
-    "latte/latte": "~2.4",
-    "nette/application": "~3.0",
-    "guzzlehttp/guzzle": "~6.2"
+    "tracy/tracy": "~2.9",
+    "latte/latte": "~2.11",
+    "nette/application": "~3.0"
   },
   "autoload": {
     "classmap": [
@@ -32,7 +31,7 @@
   },
   "extra": {
     "branch-alias": {
-      "dev-master": "1.x-dev"
+      "dev-master": "2.x-dev"
     }
   }
 }

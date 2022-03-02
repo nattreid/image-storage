@@ -51,7 +51,7 @@ class ImageStorageExtension extends CompilerExtension
 			->setArguments([
 				$this->config->assetsPath,
 				$this->config->wwwDir . '/' . $this->config->publicDir,
-				$this->config->relativePatch,
+				$this->config->relativePath,
 				$this->config->noImage,
 				$this->config->quality,
 				$this->config->defaultFlag

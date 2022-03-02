@@ -19,7 +19,7 @@ use Nette\Utils\UnknownImageFileException;
 final class ImageStorage
 {
 	private string $path;
-	private string $namespace;
+	private ?string $namespace = null;
 	private ?string $domain;
 	private ImageFactory $imageFactory;
 	private string $publicDir;
@@ -54,9 +54,9 @@ final class ImageStorage
 		return $resource;
 	}
 
-	public function createUrlResource(string $url): FileResource
+	public function createUrlResource(string $url, string $filename = null): FileResource
 	{
-		$resource = new UrlResource($url);
+		$resource = new UrlResource($url, $filename);
 		$resource->setNamespace($this->namespace);
 		$resource->setTimeOut($this->timeout);
 		return $resource;
@@ -82,7 +82,7 @@ final class ImageStorage
 			$path = $this->publicDir . '/' . $resource->namespace;
 			if (file_exists($path)) {
 				foreach (Finder::findFiles($resource->filename)->from($path) as $file) {
-					@unlink((string) $file);
+					@unlink((string)$file);
 				}
 			}
 			@unlink($resource->file);

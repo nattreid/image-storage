@@ -14,7 +14,7 @@ final class ImageFactory
 {
 	private string $publicDir;
 	private string $path;
-	private string $flag;
+	private int $flag;
 	private int $quality;
 	private string $relativePublicDir;
 	private ?string $noImage;

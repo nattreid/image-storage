@@ -12,12 +12,12 @@ use Psr\Http\Message\ResponseInterface;
 
 final class UrlResource extends FileResource
 {
-	private ?ResponseInterface $response;
+	private ?ResponseInterface $response = null;
 	private int $timeout;
 
-	public function __construct(string $url)
+	public function __construct(string $url, string $filename = null)
 	{
-		parent::__construct($url);
+		parent::__construct($url, $filename);
 	}
 
 	public function setTimeOut(int $timeout): void
