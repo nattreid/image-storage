@@ -7,32 +7,17 @@ namespace NAttreid\ImageStorage;
 use NAttreid\ImageStorage\Resources\ImageResource;
 use NAttreid\Utils\Strings;
 use Nette\Utils\Image;
+use Nette\Utils\ImageException;
 use Nette\Utils\UnknownImageFileException;
 
-/**
- * Class ImageFactory
- *
- * @author Attreid <attreid@gmail.com>
- */
-class ImageFactory
+final class ImageFactory
 {
-	/** @var string */
-	private $publicDir;
-
-	/** @var string */
-	private $path;
-
-	/** @var string */
-	private $flag;
-
-	/** @var int */
-	private $quality;
-
-	/** @var string */
-	private $relativePublicDir;
-
-	/** @var null|string */
-	private $noImage;
+	private string $publicDir;
+	private string $path;
+	private string $flag;
+	private int $quality;
+	private string $relativePublicDir;
+	private ?string $noImage;
 
 	public function __construct(string $path, string $publicDir, string $relativePublicDir, ?string $noImage, int $quality, string $flag)
 	{
@@ -63,10 +48,7 @@ class ImageFactory
 	}
 
 	/**
-	 * @param ImageResource $resource
-	 * @param string|null $domain
-	 * @return string
-	 * @throws UnknownImageFileException
+	 * @throws UnknownImageFileException|ImageException
 	 */
 	public function create(ImageResource $resource, string $domain = null): string
 	{

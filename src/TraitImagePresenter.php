@@ -6,9 +6,7 @@ use Nette\Application\UI\Template;
 
 trait TraitImagePresenter
 {
-
-	/** @var ImageStorage */
-	protected $imageStorage;
+	protected ImageStorage $imageStorage;
 
 	public function injectImageStorage(ImageStorage $imageStorage): void
 	{
@@ -18,9 +16,7 @@ trait TraitImagePresenter
 	public function createTemplate(): Template
 	{
 		$template = parent::createTemplate();
-
 		$template->imageStorage = $this->imageStorage;
-
 		return $template;
 	}
 

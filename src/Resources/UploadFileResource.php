@@ -7,20 +7,15 @@ namespace NAttreid\ImageStorage\Resources;
 use Nette\Http\FileUpload;
 
 /**
- * Class UploadResource
- *
  * @property-read FileUpload $file
- *
- * @author Attreid <attreid@gmail.com>
  */
-class UploadFileResource extends FileResource
+final class UploadFileResource extends FileResource
 {
-	/** @var FileUpload */
-	protected $file;
+	protected FileUpload $file;
 
 	public function __construct(FileUpload $file)
 	{
-		parent::__construct($file, $file->getSanitizedName());
+		parent::__construct((string)$file, $file->getSanitizedName());
 	}
 
 	protected function getContentType(): ?string

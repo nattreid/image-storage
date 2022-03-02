@@ -12,10 +12,10 @@
     }
   ],
   "require": {
-    "php": ">= 7.1",
+    "php": ">= 7.4",
     "nette/di": "~3.0",
     "nette/http": "~3.0",
-    "nattreid/utils": "~1.2",
+    "nattreid/utils": "~2.0",
     "ext-fileinfo": "*"
   },
   "require-dev": {

@@ -14,31 +14,16 @@ use NAttreid\ImageStorage\Resources\UploadFileResource;
 use NAttreid\ImageStorage\Resources\UrlResource;
 use Nette\Http\FileUpload;
 use Nette\Utils\Finder;
+use Nette\Utils\UnknownImageFileException;
 
-/**
- * Class ImageStorage
- *
- * @author Attreid <attreid@gmail.com>
- */
-class ImageStorage
+final class ImageStorage
 {
-	/** @var string */
-	private $path;
-
-	/** @var string */
-	private $namespace;
-
-	/** @var string */
-	private $domain;
-
-	/** @var ImageFactory */
-	private $imageFactory;
-
-	/** @var string */
-	private $publicDir;
-
-	/** @var int */
-	private $timeout;
+	private string $path;
+	private string $namespace;
+	private ?string $domain;
+	private ImageFactory $imageFactory;
+	private string $publicDir;
+	private int $timeout;
 
 	public function __construct(string $path, string $publicDir, ?string $domain, int $timeout, ImageFactory $imageFactory)
 	{
@@ -120,9 +105,7 @@ class ImageStorage
 	}
 
 	/**
-	 * @param ImageResource $resource
-	 * @return string
-	 * @throws \Nette\Utils\UnknownImageFileException
+	 * @throws UnknownImageFileException
 	 */
 	public function link(ImageResource $resource): string
 	{
@@ -193,5 +176,4 @@ class ImageStorage
 		@mkdir(dirname($source), 0777, true);
 		return @copy($resource->file, $source);
 	}
-
 }

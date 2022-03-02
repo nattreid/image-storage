@@ -6,56 +6,55 @@ namespace NAttreid\ImageStorage\DI;
 
 use NAttreid\ImageStorage\ImageFactory;
 use NAttreid\ImageStorage\ImageStorage;
-use NAttreid\ImageStorage\Macros\Macros;
+use NAttreid\ImageStorage\Macros\Macro;
 use Nette\DI\CompilerExtension;
 use Nette\DI\Helpers;
+use Nette\Schema\Expect;
+use Nette\Schema\Schema;
 
-/**
- * Class ImageStorageExtension
- *
- * @author Attreid <attreid@gmail.com>
- */
 class ImageStorageExtension extends CompilerExtension
 {
-	private $defaults = [
-		'assetsPath' => '%wwwDir%/../assets',
-		'wwwDir' => '%wwwDir%',
-		'publicDir' => 'assets',
-		'relativePatch' => null,
-		'quality' => 85,
-		'defaultFlag' => 'fit',
-		'noImage' => null,
-		'domain' => null,
-		'timeout' => 10
-	];
+	public function getConfigSchema(): Schema
+	{
+		return Expect::structure([
+			'assetsPath' => Expect::string()->default('%wwwDir%/../assets'),
+			'wwwDir' => Expect::string()->default('%wwwDir%'),
+			'publicDir' => Expect::string()->default('assets'),
+			'relativePath' => Expect::string()->default(null),
+			'quality' => Expect::int()->default(85),
+			'defaultFlag' => Expect::string()->default('fit'),
+			'noImage' => Expect::string()->default(null),
+			'domain' => Expect::string()->default(null),
+			'timeout' => Expect::int()->default(10),
+		]);
+	}
 
 	public function loadConfiguration(): void
 	{
 		$builder = $this->getContainerBuilder();
-		$config = $this->validateConfig($this->defaults, $this->getConfig());
 
-		$config['assetsPath'] = Helpers::expand($config['assetsPath'], $builder->parameters);
-		$config['wwwDir'] = Helpers::expand($config['wwwDir'], $builder->parameters);
-		$config['relativePatch'] = $config['relativePatch'] ?? $config['publicDir'];
+		$this->config->assetsPath = Helpers::expand($this->config->assetsPath, $builder->parameters);
+		$this->config->wwwDir = Helpers::expand($this->config->wwwDir, $builder->parameters);
+		$this->config->relativePath = $this->config->relativePath ?? $this->config->publicDir;
 
 		$builder->addDefinition($this->prefix('storage'))
 			->setType(ImageStorage::class)
 			->setArguments([
-				$config['assetsPath'],
-				$config['wwwDir'] . '/' . $config['publicDir'],
-				$config['domain'],
-				$config['timeout']
+				$this->config->assetsPath,
+				$this->config->wwwDir . '/' . $this->config->publicDir,
+				$this->config->domain,
+				$this->config->timeout
 			]);
 
 		$builder->addDefinition($this->prefix('factory'))
 			->setType(ImageFactory::class)
 			->setArguments([
-				$config['assetsPath'],
-				$config['wwwDir'] . '/' . $config['publicDir'],
-				$config['relativePatch'],
-				$config['noImage'],
-				$config['quality'],
-				$config['defaultFlag']
+				$this->config->assetsPath,
+				$this->config->wwwDir . '/' . $this->config->publicDir,
+				$this->config->relativePatch,
+				$this->config->noImage,
+				$this->config->quality,
+				$this->config->defaultFlag
 			]);
 	}
 
@@ -64,6 +63,6 @@ class ImageStorageExtension extends CompilerExtension
 		$builder = $this->getContainerBuilder();
 		$builder->getDefinition('nette.latteFactory')
 			->getResultDefinition()
-			->addSetup(Macros::class . '::install(?->getCompiler())', array('@self'));
+			->addSetup(Macro::class . '::install(?->getCompiler())', array('@self'));
 	}
 }

@@ -8,28 +8,17 @@ use NAttreid\Utils\Strings;
 use Nette\Utils\Image;
 
 /**
- * Class ImageResource
- *
  * @property-read int|null $width
  * @property-read int|null $height
  * @property-read int|null $flag
  * @property-read int|null $quality
- *
- * @author Attreid <attreid@gmail.com>
  */
-class ImageResource extends FileResource
+final class ImageResource extends FileResource
 {
-	/** @var int */
-	private $width;
-
-	/** @var int */
-	private $height;
-
-	/** @var int */
-	private $flag;
-
-	/** @var int */
-	private $quality;
+	private ?int $width = null;
+	private ?int $height = null;
+	private ?int $flag = null;
+	private ?int $quality = null;
 
 	public function setQuality(?int $quality): void
 	{

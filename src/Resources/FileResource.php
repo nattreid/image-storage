@@ -11,37 +11,26 @@ use Nette\SmartObject;
 use Nette\Utils\Random;
 
 /**
- * Class FileResource
- *
  * @property-read string $file
  * @property-read string $filename
  * @property-read string $namespace
- *
- * @author Attreid <attreid@gmail.com>
  */
 class FileResource
 {
 	use SmartObject;
 
-	/** @var mixed */
-	protected $file;
+	protected string $file;
+	protected string $filename;
+	protected ?string $namespace = null;
+	protected ?string $type = null;
 
-	/** @var string */
-	protected $filename;
-
-	/** @var string */
-	protected $namespace;
-
-	/** @var string */
-	protected $type;
-
-	public function __construct($file, string $filename = null)
+	public function __construct(string $file, string $filename = null)
 	{
 		$this->file = $file;
 		$this->filename = $filename ?? trim(Strings::webalize(basename($this->file), '.', false), '.-');
 	}
 
-	protected function getFile()
+	protected function getFile(): string
 	{
 		return $this->file;
 	}
@@ -108,7 +97,7 @@ class FileResource
 			) {
 				throw new InvalidArgumentException("Namespace must not begin or end with '/'");
 			}
-			$this->namespace = Strings::replace($namespace, '/\s+/', '');
+			$namespace = Strings::replace($namespace, '/\s+/', '');
 		}
 		$this->namespace = $namespace;
 	}

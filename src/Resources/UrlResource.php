@@ -10,18 +10,10 @@ use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Exception\ServerException;
 use Psr\Http\Message\ResponseInterface;
 
-/**
- * Class UrlResource
- *
- * @author Attreid <attreid@gmail.com>
- */
-class UrlResource extends FileResource
+final class UrlResource extends FileResource
 {
-	/** @var ResponseInterface|null */
-	private $response;
-
-	/** @var int */
-	private $timeout;
+	private ?ResponseInterface $response;
+	private int $timeout;
 
 	public function __construct(string $url)
 	{
