@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace NAttreid\ImageStorage\Resources;
 
-use NAttreid\Utils\File;
-use NAttreid\Utils\Strings;
+use NAttreid\ImageStorage\Helpers\Image;
 use Nette\InvalidArgumentException;
 use Nette\SmartObject;
 use Nette\Utils\Random;
+use Nette\Utils\Strings;
 
 /**
  * @property-read string $file
@@ -82,7 +82,7 @@ class FileResource
 
 	public function isValid(): bool
 	{
-		return File::isImageValid($this->file);
+		return Image::isValid($this->file);
 	}
 
 	public function setNamespace(?string $namespace): void

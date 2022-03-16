@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace NAttreid\ImageStorage\Resources;
 
-use NAttreid\Utils\Strings;
 use Nette\Utils\Image;
+use Nette\Utils\Strings;
 
 /**
  * @property-read int|null $width

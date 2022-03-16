@@ -12,7 +12,7 @@ use Nette\DI\Helpers;
 use Nette\Schema\Expect;
 use Nette\Schema\Schema;
 
-class ImageStorageExtension extends CompilerExtension
+final class ImageStorageExtension extends CompilerExtension
 {
 	public function getConfigSchema(): Schema
 	{

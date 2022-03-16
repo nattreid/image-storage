@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace NAttreid\ImageStorage;
 
 use NAttreid\ImageStorage\Resources\ImageResource;
-use NAttreid\Utils\Strings;
 use Nette\Utils\Image;
 use Nette\Utils\ImageException;
+use Nette\Utils\Strings;
 use Nette\Utils\UnknownImageFileException;
 
 final class ImageFactory
