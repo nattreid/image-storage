@@ -16,7 +16,7 @@
     "php": ">= 7.4",
     "nette/di": "~3.0",
     "nette/http": "~3.0",
-    "guzzlehttp/guzzle": "~7.4",
+    "guzzlehttp/guzzle": "~7.4"
   },
   "require-dev": {
     "nette/tester": "~1.7",
